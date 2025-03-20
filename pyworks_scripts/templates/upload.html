@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Address Extractor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .address-box {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 16px;
+        }
+        .copy-btn {
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+            background: #28a745;
+        }
+        .copy-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Upload a PDF to Extract Addresses</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="application/pdf" required>
+            <button type="submit">Upload & Extract</button>
+        </form>
+
+        {% if message %}
+            <p style="color: red;">{{ message }}</p>
+        {% endif %}
+
+        {% if addresses %}
+            <h3>Extracted Addresses:</h3>
+            <div class="address-box" id="addressBox">
+                {% for address in addresses %}
+                    <p>{{ address.Address }}</p>
+                {% endfor %}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard()">Copy Addresses</button>
+        {% endif %}
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            var addressBox = document.getElementById("addressBox");
+            var text = addressBox.innerText;
+            navigator.clipboard.writeText(text).then(function() {
+                alert("Addresses copied to clipboard!");
+            }).catch(function(err) {
+                console.error("Failed to copy: ", err);
+            });
+        }
+    </script>
+
+</body>
+</html>
